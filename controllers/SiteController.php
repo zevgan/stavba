@@ -9,6 +9,7 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use app\models\Finance;
 
 class SiteController extends Controller
 {
@@ -61,7 +62,15 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        /*
+        if (Yii::$app->user->isGuest) {
+            return $this->actionLogin();
+        } else {
+            return $this->render('index');
+        }
+        */
         return $this->render('index');
+
     }
 
     /**
@@ -124,5 +133,11 @@ class SiteController extends Controller
     public function actionAbout()
     {
         return $this->render('about');
+    }
+
+    public function actionFinance()
+    {
+        $model = new Finance();
+        return $this->render('finance', ['finance'=>$model->getFinance()]);
     }
 }

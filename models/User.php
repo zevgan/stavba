@@ -17,6 +17,7 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
             'password' => 'admin',
             'authKey' => 'test100key',
             'accessToken' => '100-token',
+
         ],
         '101' => [
             'id' => '101',
@@ -24,6 +25,7 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
             'password' => 'demo',
             'authKey' => 'test101key',
             'accessToken' => '101-token',
+
         ],
     ];
 

@@ -12,6 +12,13 @@ $config = [
         '@npm'   => '@vendor/npm-asset',
     ],
     'components' => [
+        'urlManager' => [
+
+            'showScriptName' => false,
+
+            'enablePrettyUrl' => true
+
+        ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'C7Bcx2mnPhm5n6B3FEzILQCI8P7LUkAf',
@@ -52,6 +59,8 @@ $config = [
         ],
         */
     ],
+
+
     'params' => $params,
 ];
 
@@ -61,14 +70,14 @@ if (YII_ENV_DEV) {
     $config['modules']['debug'] = [
         'class' => 'yii\debug\Module',
         // uncomment the following to add your IP if you are not connecting from localhost.
-        //'allowedIPs' => ['127.0.0.1', '::1'],
+       'allowedIPs' => ['91.213.143.214', '::1'],
     ];
 
     $config['bootstrap'][] = 'gii';
     $config['modules']['gii'] = [
         'class' => 'yii\gii\Module',
         // uncomment the following to add your IP if you are not connecting from localhost.
-        //'allowedIPs' => ['127.0.0.1', '::1'],
+        'allowedIPs' => ['91.213.143.214', '::1'],
     ];
 }
 
