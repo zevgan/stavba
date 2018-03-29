@@ -113,3 +113,6 @@ a.desc:after {
 .nav > li > form > button.logout:focus {
     outline: none;
 }
+.s2-togall-select{display:none !important}
+.kv-editable-link {border-bottom:0px !important;}
+.kv-grid-table td {white-space: nowrap;}

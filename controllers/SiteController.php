@@ -10,25 +10,26 @@ use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\Finance;
+use app\models\Faktury;
+use app\models\DetailPlatby;
+use webvimark\modules\UserManagement\models\User;
+
+
 
 class SiteController extends Controller
 {
+
+
+
     /**
      * {@inheritdoc}
      */
     public function behaviors()
     {
         return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'only' => ['logout'],
-                'rules' => [
-                    [
-                        'actions' => ['logout'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                ],
+ 
+            'ghost-access'=> [
+                'class' => 'webvimark\modules\UserManagement\components\GhostAccessControl',
             ],
             'verbs' => [
                 'class' => VerbFilter::className(),
@@ -69,7 +70,9 @@ class SiteController extends Controller
             return $this->render('index');
         }
         */
+
         return $this->render('index');
+       
 
     }
 
@@ -125,6 +128,9 @@ class SiteController extends Controller
         ]);
     }
 
+
+   
+
     /**
      * Displays about page.
      *
@@ -135,9 +141,4 @@ class SiteController extends Controller
         return $this->render('about');
     }
 
-    public function actionFinance()
-    {
-        $model = new Finance();
-        return $this->render('finance', ['finance'=>$model->getFinance()]);
-    }
 }

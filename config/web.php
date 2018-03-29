@@ -1,5 +1,5 @@
 <?php
-
+use kartik\datecontrol\Module;
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
 
@@ -19,6 +19,22 @@ $config = [
             'enablePrettyUrl' => true
 
         ],
+
+        'i18n' => [
+            'translations' => [
+
+                '*' => [
+                    'class' => 'webvimark\modules\UserManagement\UserManagementModule',
+                    'basePath' => '@app/messages',
+                    'sourceLanguage' => 'en-US',
+                    'fileMap' => [
+                        'front' => 'front.php',
+
+                    ],
+                ],
+            ],
+        ],
+
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'C7Bcx2mnPhm5n6B3FEzILQCI8P7LUkAf',
@@ -27,8 +43,12 @@ $config = [
             'class' => 'yii\caching\FileCache',
         ],
         'user' => [
-            'identityClass' => 'app\models\User',
-            'enableAutoLogin' => true,
+            'class' => 'webvimark\modules\UserManagement\components\UserConfig',
+
+            // Comment this if you don't want to record user logins
+            'on afterLogin' => function($event) {
+                \webvimark\modules\UserManagement\models\UserVisitLog::newVisitor($event->identity->id);
+            }
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
@@ -59,8 +79,65 @@ $config = [
         ],
         */
     ],
+    'modules' => [
+        'user-management' => [
+            'class' => 'webvimark\modules\UserManagement\UserManagementModule',
+
+            // 'enableRegistration' => false,
+
+            // Add regexp validation to passwords. Default pattern does not restrict user and can enter any set of characters.
+            // The example below allows user to enter :
+            // any set of characters
+            // (?=\S{8,}): of at least length 8
+            // (?=\S*[a-z]): containing at least one lowercase letter
+            // (?=\S*[A-Z]): and at least one uppercase letter
+            // (?=\S*[\d]): and at least one number
+            // $: anchored to the end of the string
+
+            //'passwordRegexp' => '^\S*(?=\S{8,})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])\S*$',
 
 
+            // Here you can set your handler to change layout for any controller or action
+            // Tip: you can use this event in any module
+            'on beforeAction'=>function(yii\base\ActionEvent $event) {
+                if ( $event->action->uniqueId == 'user-management/auth/login' )
+                {
+                    $event->action->controller->layout = 'loginLayout.php';
+                };
+            },
+        ],
+        'gridview' =>  [
+            'class' => '\kartik\grid\Module',
+            // your other grid module settings
+        ],
+        'gridviewKrajee' =>  [
+            'class' => '\kartik\grid\Module',
+            // your other grid module settings
+        ],
+        'datecontrol' =>  [
+            'class' => '\kartik\datecontrol\Module',
+            'displaySettings' => [
+                \kartik\datecontrol\Module::FORMAT_DATE => 'dd.MM.yyyy',
+                \kartik\datecontrol\Module::FORMAT_TIME => 'HH:mm:ss a',
+                \kartik\datecontrol\Module::FORMAT_DATETIME => 'dd-MM-yyyy HH:mm:ss a',
+            ],
+            // format settings for saving each date attribute (PHP format example)
+            'saveSettings' => [
+                \kartik\datecontrol\Module::FORMAT_DATE => 'php:Y-m-d', // saves as unix timestamp
+                \kartik\datecontrol\Module::FORMAT_TIME => 'php:H:i:s',
+                \kartik\datecontrol\Module::FORMAT_DATETIME => 'php:Y-m-d H:i:s',
+            ],
+
+            // set your display timezone
+            'displayTimezone' => 'Europe/Berlin',
+
+            // set your timezone for date saved to db
+            'saveTimezone' => 'GMT+1',
+            'autoWidget' => true,
+        ]
+    ],
+    'language' => 'cs-CZ',
+    'name'=>'Stavba Kalikova',
     'params' => $params,
 ];
 
@@ -70,14 +147,16 @@ if (YII_ENV_DEV) {
     $config['modules']['debug'] = [
         'class' => 'yii\debug\Module',
         // uncomment the following to add your IP if you are not connecting from localhost.
-       'allowedIPs' => ['91.213.143.214', '::1'],
+       'allowedIPs' => ['91.213.143.214',
+           //'90.183.170.162',
+           '::1'],
     ];
 
     $config['bootstrap'][] = 'gii';
     $config['modules']['gii'] = [
         'class' => 'yii\gii\Module',
         // uncomment the following to add your IP if you are not connecting from localhost.
-        'allowedIPs' => ['91.213.143.214', '::1'],
+        'allowedIPs' => ['91.213.143.214', '90.183.170.162','::1'],
     ];
 }
 
